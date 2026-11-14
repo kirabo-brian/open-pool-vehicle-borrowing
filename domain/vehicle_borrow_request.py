@@ -1,8 +1,8 @@
 from enum import Enum
 
-from borrowing_duration import BorrowingDuration
-from driver import DriverEligibilityService
-from errors import (
+from domain.borrowing_duration import BorrowingDuration
+from domain.driver import DriverEligibilityService
+from domain.errors import (
     DriverMismatch,
     InvalidRequest,
     InvalidTransition,
@@ -10,8 +10,8 @@ from errors import (
     RequestAlreadySubmitted,
     VehicleNotInPool,
 )
-from events import VehicleBorrowRequestSubmitted
-from identifiers import clean_id
+from domain.events import VehicleBorrowRequestSubmitted
+from domain.identifiers import clean_id
 
 
 class RequestStatus(Enum):

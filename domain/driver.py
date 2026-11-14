@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from errors import DriverNotQualified
-from identifiers import clean_id
-from vehicle_category import VehicleCategory
+from domain.errors import DriverNotQualified
+from domain.identifiers import clean_id
+from domain.vehicle_category import VehicleCategory
 
 
 @dataclass(frozen=True)

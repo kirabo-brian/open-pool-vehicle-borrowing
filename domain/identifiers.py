@@ -1,4 +1,4 @@
-from errors import InvalidRequest
+from domain.errors import InvalidRequest
 
 
 def clean_id(value, label):

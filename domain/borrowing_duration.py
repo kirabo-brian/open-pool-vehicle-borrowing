@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from errors import InvalidDuration
+from domain.errors import InvalidDuration
 
 
 @dataclass(frozen=True)

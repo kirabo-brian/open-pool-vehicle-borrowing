@@ -1,0 +1,13 @@
+test_t1_duration_value_rule (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t1_duration_value_rule) ... ok
+test_t2_request_state_rule (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t2_request_state_rule) ... ok
+test_t4_driver_must_be_qualified (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t4_driver_must_be_qualified) ... ok
+test_t5_pool_reserves_all_or_none (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t5_pool_reserves_all_or_none) ... ok
+test_t6_lookup_rule (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t6_lookup_rule) ... ok
+test_t7_main_use_case_event_handled_and_pool_updated (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t7_main_use_case_event_handled_and_pool_updated) ... ok
+test_t8_pool_rejects_follow_up_when_vehicle_taken (test_open_pool_borrowing.OpenPoolBorrowingTests.test_t8_pool_rejects_follow_up_when_vehicle_taken) ... ok
+test_t3_rejects_duplicate_vehicle_ids (test_vehicle_borrow_request.VehicleBorrowRequestTests.test_t3_rejects_duplicate_vehicle_ids) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
