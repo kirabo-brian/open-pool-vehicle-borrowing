@@ -4,10 +4,10 @@
 
 | Lead role | Team member | First responsibility |
 | --- | --- | --- |
-| Domain | To assign | Own the scope, terminology and approved BR1–BR6. Lead Slides 1–3. |
-| Domain model | To assign | Model VehicleBorrowRequest, VehiclePool and driver eligibility. Lead Slides 4–6 and present the event on Slide 10. |
-| Architecture | To assign | Wire the application service, in-memory repositories and event handler. Lead Slides 7–9 and present the walkthrough on Slide 13. |
-| Testing | To assign | Own T1–T8 and the TDD evidence. Lead Slides 11–12 and present traceability on Slide 15. |
+| Domain | Muyama Joyce | Own the scope, terminology and approved BR1–BR6. Lead Slides 1–3. |
+| Domain model | Watts Ryan Eric | Model VehicleBorrowRequest, VehiclePool and driver eligibility. Lead Slides 4–6 and present the event on Slide 10. |
+| Architecture | Ssentaaba Brian Kirabo | Wire the application service, in-memory repositories and event handler. Lead Slides 7–9 and present the walkthrough on Slide 13. |
+| Testing | Kazibwe David | Own T1–T8 and the TDD evidence. Lead Slides 11–12 and present traceability on Slide 15. |
 
 The domain lead presents the rejected design choice on Slide 14. All four review integration.
 
