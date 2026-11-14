@@ -8,6 +8,6 @@ test_t8_pool_rejects_follow_up_when_vehicle_taken (test_open_pool_borrowing.Open
 test_t3_rejects_duplicate_vehicle_ids (test_vehicle_borrow_request.VehicleBorrowRequestTests.test_t3_rejects_duplicate_vehicle_ids) ... ok
 
 ----------------------------------------------------------------------
-Ran 8 tests in 0.002s
+Ran 8 tests in 0.001s
 
 OK

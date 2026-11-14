@@ -52,8 +52,8 @@ around them.
 ### Workflow
 
 1. The application service (`SubmitVehicleBorrowRequestService`) looks up the pool and
-   the driver (BR6), builds the duration (BR1) and the draft request (BR3), and saves
-   the draft.
+   the driver (BR6), refuses a request ID that already exists (`RequestAlreadyExists`),
+   builds the duration (BR1) and the draft request (BR3), and saves the draft.
 2. It calls `request.submit(driver, pool)`. The request checks, in order:
    it is still DRAFT (BR2), the driver and pool match the request, the pool
    holds every vehicle (BR6), and the driver holds a qualification for each
@@ -99,7 +99,7 @@ reads it through a read-only `DriverDirectory` port (in-memory implementation in
 | BR3 | Invariant | `VehicleBorrowRequest` constructor | T3 |
 | BR4 | Cross-concept | `DriverEligibilityService` | T4 |
 | BR5 | Follow-up | `VehicleBorrowRequestSubmitted`, handler, `VehiclePool.reserve_all` | T5 (T7, T8 end to end) |
-| BR6 | Lookup | service + repositories, `VehicleNotInPool` | T6 |
+| BR6 | Lookup | service + repositories, `VehicleNotInPool`, `RequestAlreadyExists` | T6 |
 
 ## T3 duplicate vehicle IDs (TDD evidence)
 

@@ -2,7 +2,7 @@
 import unittest
 
 from application.dtos import SubmitVehicleBorrowRequestCommand
-from application.errors import PoolNotFound
+from application.errors import PoolNotFound, RequestAlreadyExists
 from application.reserve_vehicles_handler import ReserveVehiclesOnRequestSubmitted
 from application.submit_vehicle_borrow_request import SubmitVehicleBorrowRequestService
 from domain.borrowing_duration import BorrowingDuration
@@ -105,6 +105,14 @@ class OpenPoolBorrowingTests(unittest.TestCase):
         with self.assertRaises(VehicleNotInPool):
             service.execute(command(vehicles=("CAR-01", "BUS-99")))
         self.assertEqual(requests.get("R1").status, RequestStatus.DRAFT)
+        # rejection: a request ID that already exists cannot be submitted again
+        service, pools, requests = build_app()
+        service.execute(command("R2", vehicles=("CAR-01",)))
+        with self.assertRaises(RequestAlreadyExists):
+            service.execute(command("R2", vehicles=("TRUCK-01",)))
+        self.assertEqual(requests.get("R2").vehicle_ids, ("CAR-01",))
+        self.assertEqual(requests.get("R2").status, RequestStatus.CONFIRMED)
+        self.assertIsNone(pools.get("POOL-1").reservation_for("TRUCK-01"))
 
     def test_t7_main_use_case_event_handled_and_pool_updated(self):
         service, pools, requests = build_app()
