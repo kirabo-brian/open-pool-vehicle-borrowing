@@ -1,6 +1,6 @@
-from errors import InvalidRequest, VehicleAlreadyReserved, VehicleNotInPool
-from identifiers import clean_id
-from vehicle_category import VehicleCategory
+from domain.errors import InvalidRequest, VehicleAlreadyReserved, VehicleNotInPool
+from domain.identifiers import clean_id
+from domain.vehicle_category import VehicleCategory
 
 
 class VehiclePool:

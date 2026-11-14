@@ -1,0 +1,7 @@
+application -> domain
+infrastructure -> application
+infrastructure -> domain
+interface -> application
+interface -> domain
+interface -> infrastructure
+OK: all dependencies point inward
