@@ -1,0 +1,7 @@
+python -B -m unittest -v
+test_t3_rejects_duplicate_vehicle_ids (test_vehicle_borrow_request.VehicleBorrowRequestTests.test_t3_rejects_duplicate_vehicle_ids) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK

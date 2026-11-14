@@ -1,0 +1,16 @@
+python -B -m unittest -v
+test_t3_rejects_duplicate_vehicle_ids (test_vehicle_borrow_request.VehicleBorrowRequestTests.test_t3_rejects_duplicate_vehicle_ids) ... FAIL
+
+======================================================================
+FAIL: test_t3_rejects_duplicate_vehicle_ids (test_vehicle_borrow_request.VehicleBorrowRequestTests.test_t3_rejects_duplicate_vehicle_ids)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\user\Documents\Course Works\Semseter I Third Year\Advanced Programming\Open_Pool_Vehicle_Borrowing\test_vehicle_borrow_request.py", line 8, in test_t3_rejects_duplicate_vehicle_ids
+    with self.assertRaisesRegex(ValueError, "Duplicate vehicle ID"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
