@@ -110,8 +110,3 @@ duplicate-ID check.
 
 The test now builds the request with all five constructor arguments (request ID,
 driver ID, pool ID, vehicle IDs and duration). The assertion has not changed.
-
-## AI use
-
-Claude (Anthropic) helped draft the application layer, tests T1, T2 and T4–T8, the
-slide deck and parts of this README. The group reviewed the output and can explain it.
