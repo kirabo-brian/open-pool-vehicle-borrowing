@@ -1,7 +1,7 @@
 import unittest
 
-from borrowing_duration import BorrowingDuration
-from vehicle_borrow_request import VehicleBorrowRequest
+from domain.borrowing_duration import BorrowingDuration
+from domain.vehicle_borrow_request import VehicleBorrowRequest
 
 
 class VehicleBorrowRequestTests(unittest.TestCase):

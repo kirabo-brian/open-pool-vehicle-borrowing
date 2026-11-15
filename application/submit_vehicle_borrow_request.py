@@ -2,7 +2,7 @@ from application.dtos import (
     SubmitVehicleBorrowRequestCommand,
     SubmitVehicleBorrowRequestResult,
 )
-from application.errors import DriverNotFound, PoolNotFound
+from application.errors import DriverNotFound, PoolNotFound, RequestAlreadyExists
 from application.event_publisher import EventPublisher
 from application.repositories import (
     BorrowRequestRepository,
@@ -49,6 +49,8 @@ class SubmitVehicleBorrowRequestService:
         driver = self._drivers.get(clean_id(command.driver_id, "Driver ID"))
         if driver is None:
             raise DriverNotFound(command.driver_id)
+        if self._requests.get(clean_id(command.request_id, "Request ID")) is not None:
+            raise RequestAlreadyExists(command.request_id)  # never overwrite a request
 
         # BR1 and BR3 are enforced by these constructors.
         request = VehicleBorrowRequest(

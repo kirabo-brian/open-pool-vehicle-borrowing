@@ -13,9 +13,24 @@ The domain lead presents the rejected design choice on Slide 14. All four review
 
 ## Run the tests
 
-Run from this folder using Python 3. You need no external dependencies.
+Run from this folder using Python 3.10 or later. You need no external dependencies.
 
     py -B -m unittest -v
+
+This runs all eight tests, T1–T8. The latest output is in `evidence/final_test_run.txt`.
+
+Other commands:
+
+    py -B -m interface.cli                       # small demo of the two use cases
+    py -B evidence/check_layer_dependencies.py   # proves dependencies point inward
+
+## Project layout
+
+    domain/            value object, aggregates, domain service, event, errors
+    application/       application service, event handler, DTOs, repository abstractions
+    infrastructure/    in-memory repositories and driver directory, in-process event bus
+    interface/         minimal entry point (composition root)
+    evidence/          TDD and architecture evidence
 
 ## Domain model
 
@@ -23,7 +38,7 @@ Ryan built the domain model in plain Python. The modules hold every business
 rule and do no I/O, so the application service can load, save and publish
 around them.
 
-| Module | Contents | Rules |
+| Module (in `domain/`) | Contents | Rules |
 | --- | --- | --- |
 | `borrowing_duration.py` | `BorrowingDuration` value object: 1 to 7 whole days | BR1 |
 | `vehicle_borrow_request.py` | `VehicleBorrowRequest` aggregate and `RequestStatus` | BR2, BR3, guards BR4 and BR6 |
@@ -36,7 +51,9 @@ around them.
 
 ### Workflow
 
-1. The application service loads the request, the pool and the driver.
+1. The application service (`SubmitVehicleBorrowRequestService`) looks up the pool and
+   the driver (BR6), refuses a request ID that already exists (`RequestAlreadyExists`),
+   builds the duration (BR1) and the draft request (BR3), and saves the draft.
 2. It calls `request.submit(driver, pool)`. The request checks, in order:
    it is still DRAFT (BR2), the driver and pool match the request, the pool
    holds every vehicle (BR6), and the driver holds a qualification for each
@@ -44,43 +61,57 @@ around them.
    with no event.
 3. On success the request moves to SUBMITTED and records one
    `VehicleBorrowRequestSubmitted` event. The service collects it with
-   `request.pull_events()`.
-4. The event handler calls `pool.reserve_all(request_id, vehicle_ids)`. The pool
-   checks every vehicle before it reserves any (BR5). If a vehicle has another
-   request's reservation, the pool raises `VehicleAlreadyReserved` and changes
-   nothing.
+   `request.pull_events()` and publishes it on the in-process bus.
+4. The handler (`ReserveVehiclesOnRequestSubmitted`) calls
+   `pool.reserve_all(request_id, vehicle_ids)`. The pool checks every vehicle before it
+   reserves any (BR5). If a vehicle has another request's reservation, the pool raises
+   `VehicleAlreadyReserved` and changes nothing.
 5. The handler calls `request.confirm()` on success or
    `request.reject_reservation()` on failure. Both require SUBMITTED.
 
 ### Guards beyond BR1–BR6
 
-- `submit` rejects a driver or pool that differs from the one on the request,
-  so a caller cannot pass BR4 with another driver's record.
+- `submit` rejects a driver or pool that differs from the one on the request.
 - Request fields are read-only properties. Status changes go through `submit`,
   `confirm` and `reject_reservation`.
 - `reserve_all` rejects an empty or duplicate list. A retry by the same request
   succeeds instead of rejecting the request.
-- The pool treats `" car-01 "` and `"CAR-01"` as the same vehicle.
+- IDs are trimmed and uppercased, so `" car-01 "` and `"CAR-01"` are the same vehicle.
+
+### Driver records
+
+Driver is reference data, not an aggregate root, so it has no repository. The service
+reads it through a read-only `DriverDirectory` port (in-memory implementation in
+`infrastructure/`). The group may revisit this choice.
 
 ### Known limits
 
 - Reservations never end. Vehicle returns sit outside the scope.
-- The request stores the duration, and availability ignores it. The proposal
-  bases availability on active reservations only.
+- The request stores the duration, and availability ignores it. Availability depends on
+  active reservations only.
 
-## T3 duplicate vehicle IDs
+## Business rules and tests
+
+| Rule | Type | Responsible code | Test |
+| --- | --- | --- | --- |
+| BR1 | Value | `BorrowingDuration` | T1 |
+| BR2 | Identity/state | `VehicleBorrowRequest.submit/confirm/reject_reservation` | T2 |
+| BR3 | Invariant | `VehicleBorrowRequest` constructor | T3 |
+| BR4 | Cross-concept | `DriverEligibilityService` | T4 |
+| BR5 | Follow-up | `VehicleBorrowRequestSubmitted`, handler, `VehiclePool.reserve_all` | T5 (T7, T8 end to end) |
+| BR6 | Lookup | service + repositories, `VehicleNotInPool`, `RequestAlreadyExists` | T6 |
+
+## T3 duplicate vehicle IDs (TDD evidence)
 
 The test supplies a car, a truck, and the same car again. It expects ValueError.
-The initial model sits in evidence/t3_before.py. The red and green logs capture
-the same test before and after Ryan added the duplicate-ID check.
+The initial model sits in `evidence/t3_before.py`. `evidence/t3_red.txt` and
+`evidence/t3_green.txt` capture the same test before and after Ryan added the
+duplicate-ID check.
 
 The test now builds the request with all five constructor arguments (request ID,
 driver ID, pool ID, vehicle IDs and duration). The assertion has not changed.
 
-## Pending
+## AI use
 
-- Architecture: `SubmitVehicleBorrowRequest`, the in-memory repositories, the
-  event handler and the command-line entry point.
-- Testing: T1, T2 and T4–T8. David has a draft suite covering them.
-- Group decision: where the driver record lives. The proposal names two
-  repositories, one per aggregate, and the service needs the driver too.
+Claude (Anthropic) helped draft the application layer, tests T1, T2 and T4–T8, the
+slide deck and parts of this README. The group reviewed the output and can explain it.
